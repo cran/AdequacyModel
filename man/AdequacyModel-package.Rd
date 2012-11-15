@@ -18,6 +18,7 @@ Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2012-11-15\cr
 License: \tab GPL-2\cr
+Depends: \tab R (>= 2.10.0)\cr
 }
 }
 

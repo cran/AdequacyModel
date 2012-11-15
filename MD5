@@ -1,7 +1,7 @@
-2c05574cd0c9d6a57bea2953cdad663e *DESCRIPTION
+3038a25df7846eaccb1f53031932d271 *DESCRIPTION
 8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
-2d4aba4aa4b50551fb9b8f048ea974f2 *R/codigo.R
+26a4fefc5e0531f03c03e4ab9056308c *R/codigo.R
 02893a7eca21eec1915475e9184aee31 *data/carbone.rda
-95c61ebe8a6b7f6fdbecb455074c8513 *man/AdequacyModel-package.Rd
+b5221e1d26d2509df9c74d4a492a0d7e *man/AdequacyModel-package.Rd
 1da11cee670755fdcf84544c73c871e3 *man/carbone.Rd
-4bc1b914cb6778a5e707d4d810db6f74 *man/goodness.fit.Rd
+a62e47e2954a95051f000fc21edf5653 *man/goodness.fit.Rd

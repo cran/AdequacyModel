@@ -6,10 +6,10 @@
 Adequacy of models
 }
 \description{
-        This package provides some useful functions for calculating measures of    goodness of fit, including statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other medias goodness of fit as the AIC, CAIC and BIC.
+This package provides some useful functions for calculating measures of    goodness of fit, including statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other medias goodness of fit as the AIC, CAIC and BIC.
 }
 \usage{
-goodness.fit(fdp, fda, starts, datas, method = c("Nelder-Mead","BFGS","nlminb"))
+goodness.fit(fdp, fda, starts, datas, method = "SANN")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,7 +26,7 @@ goodness.fit(fdp, fda, starts, datas, method = c("Nelder-Mead","BFGS","nlminb"))
         Data vector considered.
 }
   \item{method}{
-        This option refers to the choice of method to be used to maximize the log-likelihood function. The default method is the \code{Nelder-Mead}. One can also choose to select the method \code{BFGS} or the \code{nlminb}.
+        This option refers to the choice of method to be used to maximize the log-likelihood function. The default method is the \code{SANN} (Simulated Annealing). Outas options accepted are: \code{BFGS} and \code{CG}. It is also accepted as the option argument nlminb (Unconstrained and constrained optimization using PORT routines). More details on these methods, see: \code{\link{optim}}, \code{\link{nlminb}}.
 }
 }
 \details{
@@ -82,6 +82,7 @@ Pedro Rafael Diniz Marinho \email{pedro.rafael.marinho@gmail.com}
 
 Cicero Rafael Barros Dias \email{cicerorafael@gmail.com}
 }
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{Adequacy model}

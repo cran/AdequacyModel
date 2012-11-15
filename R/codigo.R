@@ -1,4 +1,5 @@
-goodness.fit <- function(fdp, fda, starts, datas, method=c("Nelder-Mead","BFGS","nlminb")){
+goodness.fit <- function(fdp, fda, starts, datas,
+                method="SANN"){
   
   resultado = parametros = dados_ordenados = n = y = u <- NULL
   W_temp = A_temp = A_2 = W_2 <- NULL
@@ -7,16 +8,10 @@ goodness.fit <- function(fdp, fda, starts, datas, method=c("Nelder-Mead","BFGS",
     -sum(log(fdp(par,x)))
   }
   
-  if(method=="Nelder-Mead"){
+  if(method!="nlminb"){
     resultado = optim(starts,fn = vero, x=datas, control = list(maxit = 50000),
-                      method="Nelder-Mead")
+                      method=as.character(method))
   }
-  
-  if(method=="BFGS"){
-    resultado = optim(starts,fn = vero, x=datas, control = list(maxit = 50000),
-                      method="BFGS")    
-  }
-  
   if(method=="nlminb"){
     resultado = nlminb(starts,objective = vero, x=datas)
   }
@@ -44,10 +39,11 @@ goodness.fit <- function(fdp, fda, starts, datas, method=c("Nelder-Mead","BFGS",
   p = length(parametros)
   log.likelihood = -1*vero(parametros,datas) 
   AICc = -2*log.likelihood + 2*p + 2*(p*(p+1))/(n-p-1)
-  AIC = -2*log.likelihood + 2*p
-  BIC = -2*log.likelihood + p*log(n)
+  AIC  = -2*log.likelihood + 2*p
+  BIC  = -2*log.likelihood + p*log(n)
   resultado = (list("W" = W_estrela,"A" = A_estrela,
                     "EMV" = parametros, "AIC" = AIC ,"CAIC " = AICc, "BIC" = BIC))
+  class(resultado) <- "list" 
   return(resultado)
   
 } 
