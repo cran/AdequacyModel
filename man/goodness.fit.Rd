@@ -6,81 +6,146 @@
 Adequacy of models
 }
 \description{
-This package provides some useful functions for calculating measures of    goodness of fit, including statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other medias goodness of fit as the AIC, CAIC and BIC.
+This function provides some useful statistics to assess the quality of fit of probabilistic models, including the statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other media goodness of fit such as AIC, CAIC, BIC and Kolmogorov-Smirnov test.
 }
 \usage{
-goodness.fit(fdp, fda, starts, datas, method = "SANN")
+goodness.fit(fdp, fda, starts, datas, method="L-BFGS-B", domain=c(0,Inf),
+             emv=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{fdp}{
-        Specification of the probability density function. 
+        Probability density function. 
 }
   \item{fda}{
-        Specification of cumulative distribution function.
+        Cumulative distribution function.
 }
   \item{starts}{
         Initial parameters to maximize the likelihood function.
 }
   \item{datas}{
-        Data vector considered.
+        Data vector.
 }
   \item{method}{
-        This option refers to the choice of method to be used to maximize the log-likelihood function. The default method is the \code{SANN} (Simulated Annealing). Outas options accepted are: \code{BFGS} and \code{CG}. It is also accepted as the option argument nlminb (Unconstrained and constrained optimization using PORT routines). More details on these methods, see: \code{\link{optim}}, \code{\link{nlminb}}.
+        Method used for minimization of the function \code{-log(likelihood)}. The methods supported are: \code{L-BFGS-B} (default), \code{BFGS}, \code{Nelder-Mead}, \code{SANN}, \code{CG}. Can also be transmitted only the first letter of the methodology, ie, \code{L}, \code{B}, \code{N}, \code{S} or \code{C} respectively.
 }
+  \item{domain}{
+        Domain of probability density function. By default the domain of probability density function is the open interval 0 to infinity.This option must be an vector with two values.  
+}
+  \item{emv}{
+        Vector with the estimation maximum likelihood. This option should be used if you already have knowledge of the maximum likelihood estimates. The default is \code{NULL}, ie, the function will try to obtain the estimates of maximum likelihoods.   
+}
+
 }
 \details{
-The function returns the maximum likelihood estimates as well as some statistical goodness of fit. The goodness of fit statistics are returned: Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC) and Consistent Akaikes Information Criterion (CAIC). Such measures are commonly used to compare two models fitted. For models not fitted comparing statistics is returned Cramer-von Mises (W) and Anderson-Darling (A). These statistics are described in detail in Chen and Balakrishnan (1995).
+The function \code{goodness.fit} returns statistics (Anderson-Darling), W (Cramer-von Misses). Are also calculated other measures of goodness of fit. These functions are: AIC (Akaike Information Criterion), CAIC (Consistent Akaikes Information Criterion), BIC (Bayesian Information Criterion) and KS (Kolmogorov-Smirnov).
+
+The Kolmogorov-Smirnov test may return \code{NA} with a certain frequency. The return \code{NA} informs that the statistical \code{KS} is not reliable for the data set used. More details about this issue can be obtained from \code{\link{ks.test}}.
+
+By default, the function calculates the maximum likelihood estimates. The errors of the estimates are also calculated. In cases that the function can not obtain the maximum likelihood estimates, the change of the values initial, in some cases, resolve the problem. You can also enter with the maximum likelihood estimation if there is already prior knowledge. 
 }
 
-\seealso{\code{\link{nlminb}}, \code{\link{optim}}}
+\value{
+\item{W}{Statistic Cramer-von Misses.}
+\item{A}{Statistic Anderson Darling.}
+\item{KS}{Kolmogorov Smirnov test.}
+\item{EMV}{Maximum likelihood estimates.}
+\item{AIC}{Akaike Information Criterion}
+\item{CAIC}{Consistent Akaikes Information Criterion}
+\item{BIC}{Bayesian Information Criterion}
+\item{Erro}{Error in the maximum likelihood estimates.}
+\item{Value}{Minimum value of the function -log(likelihood).}
+\item{Convergence}{0 indicates successful completion and 1 indicates that the iteration limit maxit had been reached. More details at \code{\link{optim}}.}
+}
+
+\seealso{For details about the optimization methodologies may view the functions \code{\link{optim}}, \code{\link{ks.test}}, \code{\link{nlminb}}.}
 
 \references{
-Chen, G., Balakrishnan, N. (1995). A general purpose approximate goodness-of-fit test. Journal of Quality Technology 27, 154-161.
+Chen, G., Balakrishnan, N. (1995). A general purpose approximate goodness-of-fit test. Journal of Quality Technology, 27, 154-161.
+
+Nocedal, J. and Wright, S. J. (1999) Numerical Optimization. Springer.
 }
 
 \note{
-It is not necessary to define the likelihood function or log-likelihood. You only need to define the probability density function and distribution function. The \code{goodness.fit} needs argument \code{starts} for maximizing the log-likelihood function. Depending on the choice of the initial kick algorithm may not converge. It is advisable to inspect the graphical esolha kicks early.
+It is not necessary to define the likelihood function or log-likelihood. You only need to define the probability density function and distribution function. 
 }
 
 \examples{
 
+# Example 1:
+
 data(carbone)
-carbone = c(3.70, 2.74, 2.73, 2.50, 3.60, 3.11, 3.27, 2.87, 1.47,
-            3.11, 4.42, 2.4, 3.19, 3.22, 1.69, 3.28, 3.09, 1.87,
-            3.15, 4.90, 3.75,2.43, 2.95, 2.97, 3.39, 2.96, 2.53,
-           2.67, 2.93, 3.22, 3.39, 2.81, 4.20, 3.33, 2.55, 3.31,
-           3.31, 2.85, 2.56, 3.56, 3.15, 2.35, 2.55, 2.59, 2.38,
-           2.81, 2.77, 2.17, 2.83, 1.92, 1.41, 3.68, 2.97, 1.36,
-           0.98, 2.76, 4.91, 3.68, 1.84, 1.59, 3.19, 1.57, 0.81,
-           5.56, 1.73, 1.59, 2.00, 1.22, 1.12, 1.71, 2.17, 1.17, 
-           5.08, 2.48, 1.18, 3.51, 2.17, 1.69, 1.25, 4.38, 1.84,
-           0.39, 3.68, 2.48, 0.85, 1.61, 2.79, 4.70, 2.03, 1.80,
-           1.57, 1.08, 2.03, 1.61, 2.12, 1.89, 2.88, 2.82, 2.05,
-           3.65)
            
-we <- function(par,x){
-  c = par[1]
-  theta = par[2]
-  alpha = par[3]
-  ((c*theta)/alpha)*((x/alpha)^(c-1))*exp(-(x/alpha)^c)*((1 - exp(-(x/alpha)^c))^(theta-1))
+fdp_expweibull <- function(par,x){
+  beta = par[1]
+  c = par[2]
+  a = par[3]
+  a * beta * c * exp(-(beta*x)^c) * (beta*x)^(c-1) * (1 - exp(-(beta*x)^c))^(a-1)
 }
 
-fda_we <- function(par,x){
-  c = par[1]
-  theta = par[2]
-  alpha = par[3]
-  (1-exp(-(x/alpha)^c))^theta
+fda_expweibull <- function(par,x){
+  beta = par[1]
+  c = par[2]
+  a = par[3]
+  (1 - exp(-(beta*x)^c))^a
 }
 
-goodness.fit(fdp=we,fda = fda_we, start=c(1,2,1,1), method="Nelder-Mead",
-             datas=carbone)
+goodness.fit(fdp=fdp_expweibull, fda=fda_expweibull, 
+             starts = c(1,1,1), datas = carbone,
+             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+             
+# Example 2:
+
+data = c(0.08, 2.09, 3.48, 4.87, 6.94, 8.66, 13.11, 23.63,
+              0.20, 2.23, 3.52, 4.98, 6.97, 9.02, 13.29, 0.40,
+              2.26, 3.57, 5.06, 7.09, 9.22, 13.80, 25.74, 0.50,
+              2.46, 3.64, 5.09, 7.26, 9.47, 14.24, 25.82, 0.51,
+              2.54, 3.70, 5.17, 7.28, 9.74, 14.76, 26.31, 0.81,
+              2.62, 3.82, 5.32, 7.32, 10.06, 14.77, 32.15, 2.64,
+              3.88, 5.32, 7.39, 10.34, 14.83, 34.26, 0.90, 2.69,
+              4.18, 5.34, 7.59, 10.66, 15.96, 36.66, 1.05, 2.69,
+              4.23, 5.41, 7.62, 10.75, 16.62, 43.01, 1.19, 2.75,
+              4.26, 5.41, 7.63, 17.12, 46.12, 1.26, 2.83, 4.33, 
+              5.49, 7.66, 11.25, 17.14, 79.05, 1.35, 2.87, 5.62,
+              7.87, 11.64, 17.36, 1.40, 3.02, 4.34, 5.71, 7.93,
+              11.79, 18.10, 1.46, 4.40, 5.85, 8.26, 11.98, 19.13,
+              1.76, 3.25, 4.50, 6.25, 8.37, 12.02, 2.02, 3.31, 4.51,
+              6.54, 8.53, 12.03, 20.28, 2.02, 3.36, 6.76, 12.07,
+              21.73, 2.07, 3.36, 6.93, 8.65, 12.63, 22.69)
+
+fdp_kwweibullpoisson <- function(par,x){
+  a = par[1]
+  b = par[2]
+  c = par[3]
+  lambda = par[4]
+  beta = par[5]
+  (a*b*c*lambda*(beta^c)*(x^(c-1))*((1-exp(-(x*beta)^c))^(a-1)) *
+   ((1-(1-exp(-(beta*x)^c))^a)^(b-1)) * 
+   exp(-lambda*(1-(1-(1-exp(-(beta*x)^c))^a)^b)
+   -  (beta*x)^c))/(1-exp(-lambda))
+}
+
+fda_kwweibullpoisson <- function(par,x){
+  a = par[1]
+  b = par[2]
+  c = par[3]
+  lambda = par[4]
+  beta = par[5]
+  (1 - exp(lambda*(-(1-(1-(1-exp(-(x*beta)^c))^a)^b))))/(1-exp(-lambda)) 
+}
+
+goodness.fit(fdp=fdp_kwweibullpoisson, fda=fda_kwweibullpoisson, 
+             starts = c(0.120,1.010,1.000,1.000,0.100), datas = data,
+             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+
+data = rweibull(250,2,3)
+goodness.fit(fdp=fdp_kwweibullpoisson, fda=fda_kwweibullpoisson, 
+             starts = c(0.120,1.010,1.000,1.000,0.100), datas = data,
+             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
 }
 
 \author{
 Pedro Rafael Diniz Marinho \email{pedro.rafael.marinho@gmail.com}
-
-Cicero Rafael Barros Dias \email{cicerorafael@gmail.com}
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

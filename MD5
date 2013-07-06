@@ -1,7 +1,11 @@
-3038a25df7846eaccb1f53031932d271 *DESCRIPTION
-8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
-26a4fefc5e0531f03c03e4ab9056308c *R/codigo.R
+0d8386064b555ff09c865bd5d7f92ac2 *DESCRIPTION
+3474d8dec9140941c392f5bb30961d9a *NAMESPACE
+bb163486a00d2348970a3baec9e184b9 *R/goodness.fit.R
+b1e498f3f333838c170ccbc4cbc428ef *R/rew.R
+83932101d38b745f1d8e13c8bc62254c *R/rkwweibull.R
 02893a7eca21eec1915475e9184aee31 *data/carbone.rda
-b5221e1d26d2509df9c74d4a492a0d7e *man/AdequacyModel-package.Rd
-1da11cee670755fdcf84544c73c871e3 *man/carbone.Rd
-a62e47e2954a95051f000fc21edf5653 *man/goodness.fit.Rd
+6063450a3a304c955381b96ec755b762 *man/AdequacyModel-package.Rd
+592f661cfd4898ad0e371a1759e38331 *man/carbone.Rd
+748463546f91d9a815baeec3849948c7 *man/goodness.fit.Rd
+7cf856cce86ff03d953eea29e60e5593 *man/rew.Rd
+3a56c53bc9df57c755295292cbba71bd *man/rkwweibull.Rd

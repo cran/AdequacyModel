@@ -18,6 +18,6 @@ Nichols, M.D, Padgett, W.J. (2006). A Bootstrap control chart for Weibull percen
 }
 \examples{
 data(carbone)
-## maybe str(carbone) ; plot(carbone) ...
+hist(carbone)
 }
 \keyword{datasets}
