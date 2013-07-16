@@ -24,12 +24,12 @@ goodness.fit <- function(fdp, fda, starts, datas, method = "L-BFGS-B", domain = 
   
   value_int = as.numeric(myintegrate(f=fdp,par=starts,lower=domain[1],
                                      upper=domain[2])[1])
-  if(isTRUE(is.na(value_int))==TRUE) warning("Make sure that fdp is a probability density function. The integral in the domain specified is not convergent.")
+  if(isTRUE(is.na(value_int))==TRUE) warning("Make sure that fdp is a probability density function. The integral in the domain specified is not 					     convergent.")
   
-  if(as.character(class(value_int))!="logical"){
+  if(isTRUE(is.na(value_int))!=TRUE){
      #Verifying properties of probability density function.
     if(value_int<0.99){
-      warning("The integral from ", domain[1], " to ", domain[2]," of the probability density function has different from 1. Make sure the option domain is correct.")
+      warning("The integral from ", domain[1], " to ", domain[2]," of the probability density function has different from 1. Make sure the option 		      domain is correct.")
     }
     
     if(round(value_int)!=1){
@@ -76,7 +76,7 @@ goodness.fit <- function(fdp, fda, starts, datas, method = "L-BFGS-B", domain = 
     hessiana = resultado$hessian # matriz hessiana.
     
     dados_ordenados = sort(datas)
-    v = fda(as.vector(parametros),dados_ordenados) # Dados ordenados.
+    v = fda(as.vector(parametros), dados_ordenados) # Dados ordenados.
     n = length(datas) # Tamanho da amostra.
     y = qnorm(v) # Inversa da acumulada da normal.
     u = pnorm((y-mean(y))/sqrt(var(y)))
