@@ -1,11 +1,11 @@
-0d8386064b555ff09c865bd5d7f92ac2 *DESCRIPTION
+f5814ea0687b09c2dc58689171b85b93 *DESCRIPTION
 3474d8dec9140941c392f5bb30961d9a *NAMESPACE
-bb163486a00d2348970a3baec9e184b9 *R/goodness.fit.R
+1044e2a8f557427b9b1d16c6ad32bb30 *R/goodness.fit.R
 b1e498f3f333838c170ccbc4cbc428ef *R/rew.R
 83932101d38b745f1d8e13c8bc62254c *R/rkwweibull.R
 02893a7eca21eec1915475e9184aee31 *data/carbone.rda
 6063450a3a304c955381b96ec755b762 *man/AdequacyModel-package.Rd
 592f661cfd4898ad0e371a1759e38331 *man/carbone.Rd
-748463546f91d9a815baeec3849948c7 *man/goodness.fit.Rd
+824298b78eeb2f3b1b3207175d70b636 *man/goodness.fit.Rd
 7cf856cce86ff03d953eea29e60e5593 *man/rew.Rd
 3a56c53bc9df57c755295292cbba71bd *man/rkwweibull.Rd

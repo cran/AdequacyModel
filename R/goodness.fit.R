@@ -17,25 +17,26 @@ goodness.fit <- function(fdp, fda, starts, datas, method = "L-BFGS-B", domain = 
   
   # Verifying properties of cumulative distribution function.
   
-  if(fda(par=starts, x = domain[2])!=1) stop("The fda function informed is not a cumulative distribution function! The function no takes value 1 in Inf.")
-  if(fda(par=starts, x = domain[1])!=0) stop("Check if the cumulative distribution informed is actually a distribution function.")
+  if(fda(par=starts, x = domain[2])!=1) warning("The fda function informed is not a cumulative distribution function! The function no takes value 1 in Inf.")
+  if(fda(par=starts, x = domain[1])!=0) warning("Check if the cumulative distribution informed is actually a distribution function.")
   
   myintegrate = function(...) tryCatch(integrate(...), error=function(e) NA)
   
-  value_int = myintegrate(f=fdp,par=starts,lower=domain[1],upper=domain[2])
-  
-  if(isTRUE(is.na(value_int))==TRUE) stop("Make sure that fdp is a probability density function. The integral in the domain specified is not convergent.")
+  value_int = as.numeric(myintegrate(f=fdp,par=starts,lower=domain[1],
+                                     upper=domain[2])[1])
+  if(isTRUE(is.na(value_int))==TRUE) warning("Make sure that fdp is a probability density function. The integral in the domain specified is not convergent.")
   
   if(as.character(class(value_int))!="logical"){
-    # Verifying properties of probability density function.
-    if(value_int$value<0.99){
-      warning("The integral from 0 to infinity of the probability density function has different from 1. The integral was calculated in the interval 0 to infinity. Make sure the option domain is correct.")
+     #Verifying properties of probability density function.
+    if(value_int<0.99){
+      warning("The integral from ", domain[1], " to ", domain[2]," of the probability density function has different from 1. Make sure the option domain is correct.")
     }
     
-    if(round(value_int$value)!=1){
-      stop("fdp is not a probability density function.")
+    if(round(value_int)!=1){
+      warning("fdp is not a probability density function.")
     }
   }
+  
   if(is.null(emv)==TRUE){    
     vero = function(par,x){
       -sum(log(fdp(par,x)))

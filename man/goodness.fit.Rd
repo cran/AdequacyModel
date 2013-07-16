@@ -75,7 +75,8 @@ It is not necessary to define the likelihood function or log-likelihood. You onl
 # Example 1:
 
 data(carbone)
-           
+
+# Exponentiated Weibull - Probability density function.
 fdp_expweibull <- function(par,x){
   beta = par[1]
   c = par[2]
@@ -83,6 +84,7 @@ fdp_expweibull <- function(par,x){
   a * beta * c * exp(-(beta*x)^c) * (beta*x)^(c-1) * (1 - exp(-(beta*x)^c))^(a-1)
 }
 
+# Exponentiated Weibull - Cumulative distribution function.
 fda_expweibull <- function(par,x){
   beta = par[1]
   c = par[2]
@@ -113,6 +115,7 @@ data = c(0.08, 2.09, 3.48, 4.87, 6.94, 8.66, 13.11, 23.63,
               6.54, 8.53, 12.03, 20.28, 2.02, 3.36, 6.76, 12.07,
               21.73, 2.07, 3.36, 6.93, 8.65, 12.63, 22.69)
 
+# Kumaraswamy Weibull Poisson - Probability density function.
 fdp_kwweibullpoisson <- function(par,x){
   a = par[1]
   b = par[2]
@@ -125,6 +128,7 @@ fdp_kwweibullpoisson <- function(par,x){
    -  (beta*x)^c))/(1-exp(-lambda))
 }
 
+# Kumaraswamy Weibull Poisson - Cumulative distribution function.
 fda_kwweibullpoisson <- function(par,x){
   a = par[1]
   b = par[2]
@@ -142,8 +146,35 @@ data = rweibull(250,2,3)
 goodness.fit(fdp=fdp_kwweibullpoisson, fda=fda_kwweibullpoisson, 
              starts = c(0.120,1.010,1.000,1.000,0.100), datas = data,
              method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+
+# Example 3:
+
+# Kumaraswamy Beta - Probability density function.
+fdp_kwbeta <- function(par,x){
+  beta = par[1]
+  a = par[2]
+  alpha = par[3]
+  b = par[4]
+  (a*b*x^(alpha-1)*(1-x)^(beta-1)*(pbeta(x,alpha,beta))^(a-1)*
+  (1-pbeta(x,alpha,beta)^a)^(b-1))/beta(alpha,beta) 
+}
+# Kumaraswamy Beta - Cumulative distribution function.
+fda_kwbeta <- function(par,x){
+  beta = par[1]
+  a = par[2]
+  alpha = par[3]
+  b = par[4]
+  1 - (1 - pbeta(x,alpha,beta)^a)^b
 }
 
+data = rbeta(1000,2,2.2)
+
+goodness.fit(fdp = fdp_kwbeta, fda=fda_kwbeta, starts=c(0.5,1.02,2,1),
+datas=data, method="L-BFGS-B", domain=c(0,1), emv=NULL)
+
+}
+
+             
 \author{
 Pedro Rafael Diniz Marinho \email{pedro.rafael.marinho@gmail.com}
 }
