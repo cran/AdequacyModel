@@ -8,7 +8,7 @@
 Adequacy of probabilistic models and generation of pseudo-random numbers.
 }
 
-\description{This package provides some useful functions for calculating quality measures for adjustment, including statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not equipped. Also provided are other measures of fitness, such as AIC, CAIC and BIC. The package also provides functions for generating pseudo-random number of random variables that follow the following probability distributions: exponentiated Weibull, Kumaraswamy Weibull, Kumaraswamy Weibull Poisson.
+\description{This package provides some useful functions for calculating quality measures for adjustment, including statistics Kolmogorov-Smirnov, Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not equipped. Also provided are other measures of fitness, such as AIC, CAIC, BIC and HQIC. The package also provides functions for generating pseudo-random number of random variables that follow the following probability distributions: Kumaraswamy Birnbaum-Saunders, Kumaraswamy Pareto, Exponentiated Weibull and Kumaraswamy Weibull.
 }
 \details{
 \tabular{ll}{

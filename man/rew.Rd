@@ -13,13 +13,13 @@ rew(n, beta, c, a)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{n}{
-  Amount of generated numbers.
+  Amount of generated numbers;
 }
   \item{beta}{
-  Scale parameter of the Weibull distribution exponentiated
+  Scale parameter of the Weibull distribution exponentiated;
 }
   \item{c}{
-  Shape parameter Exponentiated Weibull distribution.
+  Shape parameter Exponentiated Weibull distribution;
 }
   \item{a}{
   Shape parameter exponentiated Weibull distribution.
@@ -27,7 +27,7 @@ rew(n, beta, c, a)
 }
 \details{
 The exponentiated Weibull family of probability distributions was introduced by Mudholkar and Srivastava (1993) as an extension of the Weibull family obtained by adding a second shape parameter. The function is defined in positive real, ie \eqn{x>0}. 
-    \deqn{G(x, \beta, c, a) = (1 - e^{-(\beta*x)^c})^{a},}
+    \deqn{F(x, \beta, c, a) = (1 - e^{-(\beta*x)^c})^{a},}
 wherein \eqn{\beta>0}, \eqn{c>0} and \eqn{a>0}.
 }
 

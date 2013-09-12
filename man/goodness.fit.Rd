@@ -6,39 +6,39 @@
 Adequacy of models
 }
 \description{
-This function provides some useful statistics to assess the quality of fit of probabilistic models, including the statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other media goodness of fit such as AIC, CAIC, BIC and Kolmogorov-Smirnov test.
+This function provides some useful statistics to assess the quality of fit of probabilistic models, including the statistics Cramer-von Mises and Anderson-Darling. These statistics are often used to compare models not fitted. You can also calculate other goodness of fit such as AIC, CAIC, BIC, HQIC and Kolmogorov-Smirnov test.
 }
 \usage{
-goodness.fit(fdp, fda, starts, datas, method="L-BFGS-B", domain=c(0,Inf),
-             emv=NULL)
+goodness.fit(pdf, cdf, starts, data, method="L-BFGS-B", domain=c(0,Inf),
+             mle=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{fdp}{
-        Probability density function. 
+  \item{pdf}{
+        Probability density function;
 }
-  \item{fda}{
-        Cumulative distribution function.
+  \item{cdf}{
+        Cumulative distribution function;
 }
   \item{starts}{
-        Initial parameters to maximize the likelihood function.
+        Initial parameters to maximize the likelihood function;
 }
-  \item{datas}{
-        Data vector.
+  \item{data}{
+        Data vector;
 }
   \item{method}{
-        Method used for minimization of the function \code{-log(likelihood)}. The methods supported are: \code{L-BFGS-B} (default), \code{BFGS}, \code{Nelder-Mead}, \code{SANN}, \code{CG}. Can also be transmitted only the first letter of the methodology, ie, \code{L}, \code{B}, \code{N}, \code{S} or \code{C} respectively.
+        Method used for minimization of the function \code{-log(likelihood)}. The methods supported are: \code{L-BFGS-B} (default), \code{BFGS}, \code{Nelder-Mead}, \code{SANN}, \code{CG}. Can also be transmitted only the first letter of the methodology, ie, \code{L}, \code{B}, \code{N}, \code{S} or \code{C} respectively;
 }
   \item{domain}{
-        Domain of probability density function. By default the domain of probability density function is the open interval 0 to infinity.This option must be an vector with two values.  
+        Domain of probability density function. By default the domain of probability density function is the open interval 0 to infinity.This option must be an vector with two values;  
 }
-  \item{emv}{
+  \item{mle}{
         Vector with the estimation maximum likelihood. This option should be used if you already have knowledge of the maximum likelihood estimates. The default is \code{NULL}, ie, the function will try to obtain the estimates of maximum likelihoods.   
 }
 
 }
 \details{
-The function \code{goodness.fit} returns statistics (Anderson-Darling), W (Cramer-von Misses). Are also calculated other measures of goodness of fit. These functions are: AIC (Akaike Information Criterion), CAIC (Consistent Akaikes Information Criterion), BIC (Bayesian Information Criterion) and KS (Kolmogorov-Smirnov).
+The function \code{goodness.fit} returns statistics KS (Kolmogorov-Smirnov), A (Anderson-Darling), W (Cramer-von Misses). Are also calculated other measures of goodness of fit. These functions are: AIC (Akaike Information Criterion), CAIC (Consistent Akaikes Information Criterion), BIC (Bayesian Information Criterion) and HQIC (Hannan-Quinn information criterion).
 
 The Kolmogorov-Smirnov test may return \code{NA} with a certain frequency. The return \code{NA} informs that the statistical \code{KS} is not reliable for the data set used. More details about this issue can be obtained from \code{\link{ks.test}}.
 
@@ -46,15 +46,16 @@ By default, the function calculates the maximum likelihood estimates. The errors
 }
 
 \value{
-\item{W}{Statistic Cramer-von Misses.}
-\item{A}{Statistic Anderson Darling.}
-\item{KS}{Kolmogorov Smirnov test.}
-\item{EMV}{Maximum likelihood estimates.}
-\item{AIC}{Akaike Information Criterion}
-\item{CAIC}{Consistent Akaikes Information Criterion}
-\item{BIC}{Bayesian Information Criterion}
-\item{Erro}{Error in the maximum likelihood estimates.}
-\item{Value}{Minimum value of the function -log(likelihood).}
+\item{W}{Statistic Cramer-von Misses;}
+\item{A}{Statistic Anderson Darling;}
+\item{KS}{Kolmogorov Smirnov test;}
+\item{mle}{Maximum likelihood estimates;}
+\item{AIC}{Akaike Information Criterion;}
+\item{CAIC}{Consistent Akaikes Information Criterion;}
+\item{BIC}{Bayesian Information Criterion;}
+\item{HQIC}{Hannan-Quinn information criterion;}
+\item{Erro}{Standard errors of the maximum likelihood estimates;}
+\item{Value}{Minimum value of the function -log(likelihood);}
 \item{Convergence}{0 indicates successful completion and 1 indicates that the iteration limit maxit had been reached. More details at \code{\link{optim}}.}
 }
 
@@ -64,6 +65,10 @@ By default, the function calculates the maximum likelihood estimates. The errors
 Chen, G., Balakrishnan, N. (1995). A general purpose approximate goodness-of-fit test. Journal of Quality Technology, 27, 154-161.
 
 Nocedal, J. and Wright, S. J. (1999) Numerical Optimization. Springer.
+
+Sakamoto, Y., Ishiguro, M., and Kitagawa G. (1986). Akaike Information Criterion Statistics. D. Reidel Publishing Company.
+
+Hannan, E. J. and Quinn, B. G. (1979). The Determination of the Order of an Autoregression. Journal of the Royal Statistical Society, Series B, 41, 190-195.
 }
 
 \note{
@@ -77,7 +82,7 @@ It is not necessary to define the likelihood function or log-likelihood. You onl
 data(carbone)
 
 # Exponentiated Weibull - Probability density function.
-fdp_expweibull <- function(par,x){
+pdf_expweibull <- function(par,x){
   beta = par[1]
   c = par[2]
   a = par[3]
@@ -85,16 +90,16 @@ fdp_expweibull <- function(par,x){
 }
 
 # Exponentiated Weibull - Cumulative distribution function.
-fda_expweibull <- function(par,x){
+cdf_expweibull <- function(par,x){
   beta = par[1]
   c = par[2]
   a = par[3]
   (1 - exp(-(beta*x)^c))^a
 }
 
-goodness.fit(fdp=fdp_expweibull, fda=fda_expweibull, 
-             starts = c(1,1,1), datas = carbone,
-             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+goodness.fit(pdf=pdf_expweibull, cdf=cdf_expweibull, 
+             starts = c(1,1,1), data = carbone,
+             method="L-BFGS-B", domain=c(0,Inf),mle=NULL)
              
 # Example 2:
 
@@ -116,7 +121,7 @@ data = c(0.08, 2.09, 3.48, 4.87, 6.94, 8.66, 13.11, 23.63,
               21.73, 2.07, 3.36, 6.93, 8.65, 12.63, 22.69)
 
 # Kumaraswamy Weibull Poisson - Probability density function.
-fdp_kwweibullpoisson <- function(par,x){
+pdf_kwweibullpoisson <- function(par,x){
   a = par[1]
   b = par[2]
   c = par[3]
@@ -129,7 +134,7 @@ fdp_kwweibullpoisson <- function(par,x){
 }
 
 # Kumaraswamy Weibull Poisson - Cumulative distribution function.
-fda_kwweibullpoisson <- function(par,x){
+cdf_kwweibullpoisson <- function(par,x){
   a = par[1]
   b = par[2]
   c = par[3]
@@ -138,19 +143,19 @@ fda_kwweibullpoisson <- function(par,x){
   (1 - exp(lambda*(-(1-(1-(1-exp(-(x*beta)^c))^a)^b))))/(1-exp(-lambda)) 
 }
 
-goodness.fit(fdp=fdp_kwweibullpoisson, fda=fda_kwweibullpoisson, 
-             starts = c(0.120,1.010,1.000,1.000,0.100), datas = data,
-             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+goodness.fit(pdf=pdf_kwweibullpoisson, cdf=cdf_kwweibullpoisson, 
+             starts = c(0.120,1.010,1.000,1.000,0.100), data = data,
+             method="L-BFGS-B", domain=c(0,Inf),mle=NULL)
 
 data = rweibull(250,2,3)
-goodness.fit(fdp=fdp_kwweibullpoisson, fda=fda_kwweibullpoisson, 
-             starts = c(0.120,1.010,1.000,1.000,0.100), datas = data,
-             method="L-BFGS-B", domain=c(0,Inf),emv=NULL)
+goodness.fit(pdf=pdf_kwweibullpoisson, cdf=cdf_kwweibullpoisson, 
+             starts = c(0.120,1.010,1.000,1.000,0.100), data = data,
+             method="L-BFGS-B", domain=c(0,Inf),mle=NULL)
 
 # Example 3:
 
 # Kumaraswamy Beta - Probability density function.
-fdp_kwbeta <- function(par,x){
+pdf_kwbeta <- function(par,x){
   beta = par[1]
   a = par[2]
   alpha = par[3]
@@ -159,7 +164,7 @@ fdp_kwbeta <- function(par,x){
   (1-pbeta(x,alpha,beta)^a)^(b-1))/beta(alpha,beta) 
 }
 # Kumaraswamy Beta - Cumulative distribution function.
-fda_kwbeta <- function(par,x){
+cdf_kwbeta <- function(par,x){
   beta = par[1]
   a = par[2]
   alpha = par[3]
@@ -169,8 +174,8 @@ fda_kwbeta <- function(par,x){
 
 data = rbeta(1000,2,2.2)
 
-goodness.fit(fdp = fdp_kwbeta, fda=fda_kwbeta, starts=c(0.5,1.02,2,1),
-datas=data, method="L-BFGS-B", domain=c(0,1), emv=NULL)
+goodness.fit(pdf = pdf_kwbeta, cdf=cdf_kwbeta, starts=c(0.5,1.02,2,1),
+data=data, method="L-BFGS-B", domain=c(0,1), mle=NULL)
 
 }
 

@@ -1,5 +1,11 @@
 export(goodness.fit)
+export(TTT)
 export(rew)
 export(rkwweibull)
-
-
+export(rkwp)
+export(rkwbs)
+export(descriptive)
+importFrom(VGAM, rkumar)
+importFrom(gbs, searchMode)
+importFrom(timeDate, kurtosis)
+importFrom(timeDate, skewness)
