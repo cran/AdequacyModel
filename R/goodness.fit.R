@@ -29,7 +29,7 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
   
   if(isTRUE(is.na(value_int))!=TRUE){
      #Verifying properties of probability density function.
-    if(value_int<0.99){
+    if(value_int<0.90){
       warning("The integral from ", domain[1], " to ", domain[2]," of the probability density function has different from 1. Make sure the option 		      domain is correct.")
     }
     
@@ -85,6 +85,14 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     W_temp <- vector()
     A_temp <- vector()
     
+    id = which(y==Inf)
+    if(length(id)!=0L){
+      y = y[-id]
+      v = v[-id]
+      u = pnorm((y - mean(y))/sd(y))
+      n = length(y)
+    }
+    
     for(i in 1:n){
       W_temp[i] = (u[i] - (2*i-1)/(2*n))^2
       A_temp[i] = (2*i-1)*log(u[i]) + (2*n+1-2*i)*log(1-u[i])
@@ -113,7 +121,7 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     return(result)
   }
   
-  if(class(domain)=="numeric"){
+  if(class(mle)=="numeric"){
     
     likelihood = function(par,x){
       -sum(log(pdf(par,x)))
@@ -125,6 +133,14 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     n = length(data) # Tamanho da amostra.
     y = qnorm(v) # Inversa da acumulada da normal.
     u = pnorm((y-mean(y))/sqrt(var(y)))
+
+    id = which(y==Inf)
+    if(length(id)!=0L){
+      y = y[-id]
+      v = v[-id]
+      u = pnorm((y - mean(y))/sd(y))
+      n = length(y)
+    }
     
     W_temp <- vector()
     A_temp <- vector()
