@@ -78,20 +78,13 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     
     data_orderdenados = sort(data)
     v = cdf(as.vector(parameters), data_orderdenados) # Dados ordenados.
+    v[v==1] = 0.99999999999999994
     n = length(data) # Tamanho da amostra.
     y = qnorm(v) # Inversa da acumulada da normal.
     u = pnorm((y-mean(y))/sqrt(var(y)))
     
     W_temp <- vector()
     A_temp <- vector()
-    
-    id = which(y==Inf)
-    if(length(id)!=0L){
-      y = y[-id]
-      v = v[-id]
-      u = pnorm((y - mean(y))/sd(y))
-      n = length(y)
-    }
     
     for(i in 1:n){
       W_temp[i] = (u[i] - (2*i-1)/(2*n))^2
@@ -111,7 +104,7 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     HQIC = -2*log.likelihood + 2*log(log(n))*p
     ks.testg = function(...) tryCatch(ks.test(...),
                                       warning = function(war) NA)
-    KS = ks.testg(x = data, y= "cdf", par = as.vector(parameters))
+    KS = ks.test(x = data, y= "cdf", par = as.vector(parameters))
     
     result = (list("W" = W_star,"A" = A_star, "KS" = KS,
                       "mle" = parameters, "AIC" = AIC ,"CAIC " = AICc,
@@ -130,17 +123,10 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     parameters = mle
     data_orderdenados = sort(data)
     v = cdf(as.vector(parameters),data_orderdenados) # Dados ordenados.
+    v[v==1] = 0.99999999999999994
     n = length(data) # Tamanho da amostra.
     y = qnorm(v) # Inversa da acumulada da normal.
     u = pnorm((y-mean(y))/sqrt(var(y)))
-
-    id = which(y==Inf)
-    if(length(id)!=0L){
-      y = y[-id]
-      v = v[-id]
-      u = pnorm((y - mean(y))/sd(y))
-      n = length(y)
-    }
     
     W_temp <- vector()
     A_temp <- vector()
@@ -163,7 +149,7 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     HQIC = -2*log.likelihood + 2*log(log(n))*p
     ks.testg = function(...) tryCatch(ks.test(...),
                                       warning = function(war) NA)
-    KS = ks.testg(x = data, y= "cdf", par = as.vector(parameters))
+    KS = ks.test(x = data, y= "cdf", par = as.vector(parameters))
     
     result = (list("W" = W_star,"A" = A_star, "KS" = KS, "AIC" = AIC,
                       "CAIC" = AICc, "BIC" = BIC, "HQIC" = HQIC))
