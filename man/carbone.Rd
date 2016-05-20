@@ -1,6 +1,6 @@
 \name{carbone}
 \alias{carbone}
-\encoding{latin1}
+\encoding{UTF-8}
 \title{
 Breaking stress of carbon fibres
 }

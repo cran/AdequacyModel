@@ -8,7 +8,7 @@ TTT function
 There are several behaviors that the failure rate function of a random variable T can take. In this context, the graph of total test time (TTT curve) proposed by Aarset (1987) may be used for obtaining empirical behavior of the function failure rate.
 }
 \usage{
-TTT(x, lwd = 2, lty = 2, col = "black", grid = TRUE, ...)
+TTT(x, lwd = 2, lty = 2, col = "black", grid = TRUE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -56,7 +56,7 @@ The graphic TTT may have various forms. Aarset (1987) showed that if the curve a
 
 The TTT curve is constructed by values \eqn{r/n} and \eqn{G(r/n)}, wherein
 \deqn{
-G(r/n) =  \frac{[\sum_{i=1}^{n} T_{i:n} + (n-r)T_{r:n}]}{\sum_{i=1}^{n}T_{i:n}}, r = 1, \ldots, n, T_{1:n} = 1, \ldots, n.
+G(r/n) =  \frac{[\sum_{i=1}^{r} T_{i:n} + (n-r)T_{r:n}]}{\sum_{i=1}^{n}T_{i:n}}, r = 1, \ldots, n, T_{1:n} = 1, \ldots, n.
 }
 
 }
@@ -68,7 +68,7 @@ G(r/n) =  \frac{[\sum_{i=1}^{n} T_{i:n} + (n-r)T_{r:n}]}{\sum_{i=1}^{n}T_{i:n}},
 %}
 \examples{
 data(carbone)
-TTT(carbone, col="red", lwd=2.5, grid=TRUE, lty=2)
+TTT(carbone, col = "red", lwd = 2.5, grid = TRUE, lty = 2)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

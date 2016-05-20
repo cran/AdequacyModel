@@ -1,6 +1,6 @@
 goodness.fit <-
-function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
-                         mle = NULL){
+function(pdf, cdf, starts, data, method = "PSO", domain = c(0,Inf),
+                         mle = NULL,...){
   
   if(missingArg(cdf)==TRUE) stop("Unknown cumulative distribution function. The function needs to be informed.")
   if(missingArg(pdf)==TRUE) stop("Unknown probability density function. The function needs to be informed.")
@@ -43,6 +43,10 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
       -sum(log(pdf(par,x)))
     }
     
+    if(method == "PSO" || method == "P"){
+      result = pso(func = likelihood, data = data,...)
+    }
+    
     if(method == "Nelder-Mead" || method == "N"){
       result = optim(par = starts, fn = likelihood, x = data,
                         method = "Nelder-Mead", hessian = TRUE)
@@ -52,11 +56,6 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
       result = optim(par = starts, fn = likelihood, x = data,
                         method = "CG", hessian = TRUE)
     }  
-    
-    if(method == "L-BFGS-B" || method == "L"){
-      result = optim(par=starts, fn = likelihood,method="L-BFGS-B", x = data,
-                        lower=c(1e-10,1e-10,1e-10,1e-10,1e-10), upper=c(Inf,Inf,Inf,Inf,Inf), hessian=TRUE)
-    }
     
     if(method == "SANN" || method == "S"){
       result = optim(par = starts, fn = likelihood, x = data,
@@ -68,9 +67,9 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
                         method = "BFGS", hessian = TRUE)
     }
     
-    if((FALSE %in% (method != c("L-BFGS-B", "L", "BFGS", "B",
-                                "Nelder-Mead", "N", "SANN", "S", "CG", "C")))==FALSE){
-      stop("Valid options are: L-BFGS-B or L, BFGS or B, Nelder-Mead or N, SANN or S, CG or C.")
+    if((FALSE %in% (method != c("PSO", "L", "BFGS", "B",
+                                "Nelder-Mead", "P", "N", "SANN", "S", "CG", "C")))==FALSE){
+      stop("Valid options are: PSO or P, BFGS or B, Nelder-Mead or N, SANN or S, CG or C.")
     }
     
     parameters = result$par
@@ -78,9 +77,10 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     
     data_orderdenados = sort(data)
     v = cdf(as.vector(parameters), data_orderdenados) # Dados ordenados.
-    v[v==1] = 0.99999999999999994
     n = length(data) # Tamanho da amostra.
+    
     y = qnorm(v) # Inversa da acumulada da normal.
+    y[which(y==Inf)] = 10
     u = pnorm((y-mean(y))/sqrt(var(y)))
     
     W_temp <- vector()
@@ -106,12 +106,21 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
                                       warning = function(war) NA)
     KS = ks.test(x = data, y= "cdf", par = as.vector(parameters))
     
-    result = (list("W" = W_star,"A" = A_star, "KS" = KS,
-                      "mle" = parameters, "AIC" = AIC ,"CAIC " = AICc,
-                      "BIC" = BIC, "HQIC" = HQIC, "Erro" = sqrt(diag(solve(hessiana))),
-                      "Value" = result$value, "Convergence" = result$convergence))
-    class(result) <- "list" 
-    return(result)
+    
+    if(method=="PSO" || method=="P"){
+      result = (list("W" = W_star,"A" = A_star, "KS" = KS,
+                     "mle" = parameters, "AIC" = AIC ,"CAIC " = AICc,
+                     "BIC" = BIC, "HQIC" = HQIC, "Value" = result$f[length(result$f)]))
+      class(result) <- "list" 
+      return(result)
+    }else{
+      result = (list("W" = W_star,"A" = A_star, "KS" = KS,
+                     "mle" = parameters, "AIC" = AIC ,"CAIC " = AICc,
+                     "BIC" = BIC, "HQIC" = HQIC, "Erro" = sqrt(diag(solve(hessiana))),
+                     "Value" = result$value, "Convergence" = result$convergence))
+      class(result) <- "list" 
+      return(result)
+    }
   }
   
   if(class(mle)=="numeric"){
@@ -123,9 +132,9 @@ function(pdf, cdf, starts, data, method = "L-BFGS-B", domain = c(0,Inf),
     parameters = mle
     data_orderdenados = sort(data)
     v = cdf(as.vector(parameters),data_orderdenados) # Dados ordenados.
-    v[v==1] = 0.99999999999999994
     n = length(data) # Tamanho da amostra.
     y = qnorm(v) # Inversa da acumulada da normal.
+    y[which(y==Inf)] = 10
     u = pnorm((y-mean(y))/sqrt(var(y)))
     
     W_temp <- vector()
